@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Leaderboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .leaderboard {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            background-color: #f9f9f9;
+            transform: translateX(5px);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            width: 50px;
+            text-align: center;
+            margin-right: 20px;
+            color: #667eea;
+        }
+
+        .rank.rank-1 {
+            color: #FFD700;
+            font-size: 1.8em;
+        }
+
+        .rank.rank-2 {
+            color: #C0C0C0;
+            font-size: 1.7em;
+        }
+
+        .rank.rank-3 {
+            color: #CD7F32;
+            font-size: 1.6em;
+        }
+
+        .team-info {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .team-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            cursor: help;
+            position: relative;
+        }
+
+        .badge:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            margin-bottom: 8px;
+            z-index: 10;
+        }
+
+        .badge.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+
+        .badge.silver {
+            background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+        }
+
+        .badge.bronze {
+            background: linear-gradient(135deg, #CD7F32, #B8860B);
+        }
+
+        .badge.star {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+        }
+
+        .badge.fire {
+            background: linear-gradient(135deg, #FF4500, #FFD700);
+        }
+
+        .badge.trophy {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .score {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .score-label {
+            font-size: 0.8em;
+            color: #999;
+            display: block;
+            font-weight: normal;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .leaderboard-item {
+                padding: 15px 20px;
+            }
+
+            .rank {
+                width: 40px;
+                margin-right: 15px;
+            }
+
+            .team-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .score {
+                text-align: left;
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Team Leaderboard</h1>
+            <p>Live Rankings & Achievements</p>
+        </div>
+
+        <div class="leaderboard" id="leaderboard"></div>
+
+        <div class="last-updated">
+            Last updated: <span id="timestamp"></span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script>
+        // CONFIGURATION - Replace with your Google Sheet CSV URL
+        // To get this URL:
+        // 1. Create a Google Sheet with columns: Team Name, Score, Badges
+        // 2. Share it publicly (Anyone with link can view)
+        // 3. Get the Sheet ID from the URL (between /d/ and /edit)
+        // 4. Use this format: https://docs.google.com/spreadsheets/d/SHEET_ID/export?format=csv
+        
+        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1m8J8CRbvJT_iwIm8XJh2iGM3WaRTTlhgqRmtAADXabU/export?format=csv';
+
+        // Badge emoji mapping (from Google Sheet)
+        const badgeEmojis = {
+            'top': '👑',
+            'star': '⭐',
+            'fire': '🔥',
+            'goal': '🎯',
+            'rocket': '🚀',
+            'strong': '💪',
+            'growing': '🌱',
+            'gold': '🥇',
+            'silver': '🥈',
+            'bronze': '🥉'
+        };
+
+        const badgeTooltips = {
+            'top': 'Top Performer',
+            'star': '5-Day Streak',
+            'fire': 'Hot Streak',
+            'goal': 'Goal Achieved',
+            'rocket': 'Rising Star',
+            'strong': 'Strong Performer',
+            'growing': 'Growing',
+            'gold': 'Champion',
+            'silver': 'Runner-up',
+            'bronze': 'Third Place'
+        };
+
+        function parseTeams(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) return [];
+
+            const teams = [];
+            
+            // Skip header row (Team Name, Score, Badges)
+            for (let i = 1; i < lines.length; i++) {
+                const parts = lines[i].split(',').map(p => p.trim());
+                if (parts.length < 2) continue;
+
+                const name = parts[0];
+                const score = parseInt(parts[1]) || 0;
+                const badgeString = parts[2] || '';
+
+                // Parse badges (comma-separated badge keys)
+                const badges = badgeString
+                    .split('|')
+                    .map(b => b.trim())
+                    .filter(b => b)
+                    .map(badgeKey => ({
+                        symbol: badgeEmojis[badgeKey] || badgeKey,
+                        tooltip: badgeTooltips[badgeKey] || badgeKey
+                    }));
+
+                teams.push({ name, score, badges });
+            }
+
+            // Sort by score descending
+            return teams.sort((a, b) => b.score - a.score);
+        }
+
+        function renderLeaderboard(teams) {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = '';
+            
+            if (teams.length === 0) {
+                leaderboard.innerHTML = '<div style="padding: 40px; text-align: center; color: #999;">No data found. Check your Google Sheet URL.</div>';
+                return;
+            }
+
+            teams.forEach((team, index) => {
+                const rank = index + 1;
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+
+                // Generate rank with medal emoji
+                let rankDisplay = rank.toString();
+                if (rank === 1) rankDisplay = '🥇';
+                else if (rank === 2) rankDisplay = '🥈';
+                else if (rank === 3) rankDisplay = '🥉';
+
+                // Generate badges
+                const badgesHTML = team.badges
+                    .map(badge => `<span class="badge" data-tooltip="${badge.tooltip}">${badge.symbol}</span>`)
+                    .join('');
+
+                item.innerHTML = `
+                    <div class="rank rank-${rank}">${rankDisplay}</div>
+                    <div class="team-info">
+                        <div class="team-name">${team.name}</div>
+                        <div class="badges">${badgesHTML}</div>
+                    </div>
+                    <div class="score">
+                        ${team.score.toLocaleString()}
+                        <span class="score-label">points</span>
+                    </div>
+                `;
+
+                leaderboard.appendChild(item);
+            });
+        }
+
+        function initLeaderboard() {
+            // Fetch CSV from Google Sheet
+            fetch(GOOGLE_SHEET_URL)
+                .then(response => response.text())
+                .then(csvText => {
+                    const teams = parseTeams(csvText);
+                    renderLeaderboard(teams);
+                })
+                .catch(error => {
+                    console.error('Error fetching leaderboard data:', error);
+                    const leaderboard = document.getElementById('leaderboard');
+                    leaderboard.innerHTML = `<div style="padding: 40px; text-align: center; color: #e74c3c;">
+                        Error loading data. Check console and verify the Google Sheet URL is correct and public.
+                    </div>`;
+                });
+
+            // Update timestamp
+            const now = new Date();
+            document.getElementById('timestamp').textContent = now.toLocaleString();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initLeaderboard);
+
+        // Optional: Auto-refresh every 5 minutes (300000 ms)
+        // Uncomment to enable:
+        // setInterval(() => {
+        //     initLeaderboard();
+        // }, 300000);
+    </script>
+</body>
+</html>
