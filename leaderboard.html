@@ -462,34 +462,38 @@
             const lines = csvText.trim().split('\n');
             if (lines.length < 2) return [];
 
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
             const teams = [];
-            
-            // Skip header row (Team Name, Score, Badges)
+
             for (let i = 1; i < lines.length; i++) {
                 const parts = lines[i].split(',').map(p => p.trim());
                 if (parts.length < 2) continue;
 
                 const name = parts[0];
                 const score = parseInt(parts[1]) || 0;
-                const badgeString = parts[2] || '';
 
-                // Parse badges (comma-separated badge keys)
-                const badges = badgeString
-                    .split('|')
-                    .map(b => b.trim())
-                    .filter(b => b)
-                    .map(badgeKey => ({
-                        imagePath: badgeImages[badgeKey] || 'Images/placeholder.png',
-                        tooltip: badgeTooltips[badgeKey] || badgeKey,
-                        key: badgeKey
-                    }));
+                const badges = [];
+
+                // Start from column index 2 (badge columns)
+                for (let j = 2; j < headers.length; j++) {
+                    const badgeKey = headers[j];
+                    const value = parts[j];
+
+                    if (value === "TRUE") {
+                        badges.push({
+                            imagePath: badgeImages[badgeKey] || 'Images/placeholder.png',
+                            tooltip: badgeTooltips[badgeKey] || badgeKey,
+                            key: badgeKey
+                        });
+                    }
+                }
 
                 teams.push({ name, score, badges });
             }
 
-            // Sort by score descending
             return teams.sort((a, b) => b.score - a.score);
         }
+
 
         function renderBadges(badges, isMobile = false, maxBadges = null) {
             let max = maxBadges;
