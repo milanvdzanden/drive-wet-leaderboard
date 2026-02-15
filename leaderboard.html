@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
             min-height: 100vh;
             padding: 40px 20px;
         }
@@ -25,38 +25,129 @@
 
         .header {
             text-align: center;
-            color: white;
+            color: #e8eef5;
             margin-bottom: 40px;
         }
 
         .header h1 {
             font-size: 3em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: none;
         }
 
         .header p {
             font-size: 1.1em;
-            opacity: 0.9;
+            opacity: 0.7;
+        }
+
+        .podium-section {
+            background: rgba(30, 35, 50, 0.5);
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px 20px 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 20px;
+            min-height: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .pedestal {
+            flex: 1;
+            max-width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .pedestal-info {
+            background: linear-gradient(135deg, rgba(120, 130, 150, 0.3) 0%, rgba(100, 110, 130, 0.2) 100%);
+            color: #e8eef5;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            width: 100%;
+            margin-bottom: -1px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: 1px solid rgba(180, 190, 220, 0.2);
+        }
+
+        .pedestal-rank {
+            font-size: 3em;
+            margin: 10px 0;
+        }
+
+        .pedestal-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .pedestal-score {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .pedestal-base {
+            background: linear-gradient(135deg, rgba(100, 110, 130, 0.3) 0%, rgba(80, 90, 110, 0.2) 100%);
+            width: 100%;
+            padding: 15px;
+            border-radius: 0 0 10px 10px;
+            font-weight: bold;
+            color: #b4bedd;
+            border-top: 1px solid rgba(180, 190, 220, 0.2);
+        }
+
+        .pedestal.rank-1 .pedestal-info {
+            background: linear-gradient(135deg, rgba(200, 170, 80, 0.4) 0%, rgba(180, 150, 60, 0.3) 100%);
+            order: -1;
+            height: 240px;
+            border: 1px solid rgba(220, 190, 100, 0.3);
+        }
+
+        .pedestal.rank-2 .pedestal-info {
+            background: linear-gradient(135deg, rgba(180, 190, 210, 0.3) 0%, rgba(160, 170, 190, 0.2) 100%);
+            height: 180px;
+            border: 1px solid rgba(190, 200, 220, 0.2);
+        }
+
+        .pedestal.rank-3 .pedestal-info {
+            background: linear-gradient(135deg, rgba(170, 140, 100, 0.3) 0%, rgba(150, 120, 80, 0.2) 100%);
+            height: 140px;
+            border: 1px solid rgba(190, 160, 120, 0.2);
+        }
+
+        .pedestal-badges {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .leaderboard {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: rgba(30, 35, 50, 0.5);
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .leaderboard-item {
             display: flex;
             align-items: center;
             padding: 20px 30px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(180, 190, 220, 0.1);
             transition: all 0.3s ease;
         }
 
         .leaderboard-item:hover {
-            background-color: #f9f9f9;
+            background-color: rgba(100, 110, 130, 0.15);
             transform: translateX(5px);
         }
 
@@ -70,21 +161,21 @@
             width: 50px;
             text-align: center;
             margin-right: 20px;
-            color: #667eea;
+            color: #8a95b8;
         }
 
         .rank.rank-1 {
-            color: #FFD700;
+            color: #d4af6f;
             font-size: 1.8em;
         }
 
         .rank.rank-2 {
-            color: #C0C0C0;
+            color: #b4bedd;
             font-size: 1.7em;
         }
 
         .rank.rank-3 {
-            color: #CD7F32;
+            color: #a88f65;
             font-size: 1.6em;
         }
 
@@ -98,7 +189,7 @@
         .team-name {
             font-size: 1.2em;
             font-weight: 600;
-            color: #333;
+            color: #e8eef5;
         }
 
         .badges {
@@ -107,18 +198,33 @@
             flex-wrap: wrap;
         }
 
+        .badge-overflow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(100, 110, 130, 0.3);
+            color: #e8eef5;
+            font-size: 0.9em;
+            font-weight: bold;
+            border: 1px solid rgba(180, 190, 220, 0.2);
+            flex-shrink: 0;
+        }
+
         .badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 0.8em;
-            font-weight: bold;
-            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 25%;
             cursor: help;
             position: relative;
+            border: 1px solid rgba(180, 190, 220, 0.2);
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
         .badge:hover::after {
@@ -127,58 +233,59 @@
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: #333;
-            color: white;
+            background: rgba(40, 50, 70, 0.9);
+            color: #e8eef5;
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 0.9em;
             white-space: nowrap;
             margin-bottom: 8px;
             z-index: 10;
+            border: 1px solid rgba(180, 190, 220, 0.2);
         }
 
         .badge.gold {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
+            /* Gold badge */
         }
 
         .badge.silver {
-            background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+            /* Silver badge */
         }
 
         .badge.bronze {
-            background: linear-gradient(135deg, #CD7F32, #B8860B);
+            /* Bronze badge */
         }
 
         .badge.star {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+            /* Star badge */
         }
 
         .badge.fire {
-            background: linear-gradient(135deg, #FF4500, #FFD700);
+            /* Fire badge */
         }
 
         .badge.trophy {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            /* Trophy badge */
         }
 
         .score {
             font-size: 1.8em;
             font-weight: bold;
-            color: #667eea;
-            min-width: 100px;
+            color: #d4af6f;
+            min-width: 60px;
             text-align: right;
         }
 
         .score-label {
             font-size: 0.8em;
-            color: #999;
-            display: block;
+            color: #8a95b8;
+            display: inline;
             font-weight: normal;
         }
 
         .last-updated {
             text-align: center;
-            color: white;
+            color: #b4bedd;
             margin-top: 30px;
             font-size: 0.9em;
             opacity: 0.8;
@@ -187,6 +294,63 @@
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 2em;
+            }
+
+            .podium-section {
+                min-height: 300px;
+                padding: 30px 10px 15px;
+                gap: 10px;
+            }
+
+            .pedestal {
+                max-width: 100%;
+            }
+
+            .pedestal-info {
+                padding: 12px;
+            }
+
+            .pedestal-rank {
+                font-size: 2em;
+                margin: 5px 0;
+            }
+
+            .pedestal-name {
+                font-size: 0.85em;
+                margin-bottom: 5px;
+                word-break: break-word;
+            }
+
+            .pedestal-score {
+                font-size: 1.3em;
+                margin-top: 5px;
+            }
+
+            .pedestal-base {
+                padding: 10px;
+                font-size: 0.85em;
+            }
+
+            .pedestal-badges {
+                gap: 3px;
+            }
+
+            .badge {
+                width: 40px;
+                height: 40px;
+                font-size: 0.7em;
+            }
+
+            .badges {
+                flex-wrap: nowrap;
+                max-width: auto;
+                overflow: hidden;
+            }
+
+            .badge-overflow {
+                width: 40px;
+                height: 40px;
+                font-size: 0.7em;
             }
 
             .leaderboard-item {
@@ -233,20 +397,23 @@
         // 3. Get the Sheet ID from the URL (between /d/ and /edit)
         // 4. Use this format: https://docs.google.com/spreadsheets/d/SHEET_ID/export?format=csv
         
-        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1m8J8CRbvJT_iwIm8XJh2iGM3WaRTTlhgqRmtAADXabU/export?format=csv';
+        // Get spreadsheet ID from URL parameter (required)
+        const urlParams = new URLSearchParams(window.location.search);
+        const spreadsheetId = urlParams.get('spreadsheet');
+        const GOOGLE_SHEET_URL = spreadsheetId ? `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv` : null;
 
-        // Badge emoji mapping (from Google Sheet)
-        const badgeEmojis = {
-            'top': '👑',
-            'star': '⭐',
-            'fire': '🔥',
-            'goal': '🎯',
-            'rocket': '🚀',
-            'strong': '💪',
-            'growing': '🌱',
-            'gold': '🥇',
-            'silver': '🥈',
-            'bronze': '🥉'
+        // Badge image mapping (from Google Sheet)
+        const badgeImages = {
+            'top': 'Images/top.png',
+            'star': 'Images/star.png',
+            'fire': 'Images/fire.png',
+            'goal': 'Images/goal.png',
+            'rocket': 'Images/rocket.png',
+            'strong': 'Images/strong.png',
+            'growing': 'Images/growing.png',
+            'gold': 'Images/gold.png',
+            'silver': 'Images/silver.png',
+            'bronze': 'Images/bronze.png'
         };
 
         const badgeTooltips = {
@@ -283,8 +450,9 @@
                     .map(b => b.trim())
                     .filter(b => b)
                     .map(badgeKey => ({
-                        symbol: badgeEmojis[badgeKey] || badgeKey,
-                        tooltip: badgeTooltips[badgeKey] || badgeKey
+                        imagePath: badgeImages[badgeKey] || 'Images/placeholder.png',
+                        tooltip: badgeTooltips[badgeKey] || badgeKey,
+                        key: badgeKey
                     }));
 
                 teams.push({ name, score, badges });
@@ -292,6 +460,28 @@
 
             // Sort by score descending
             return teams.sort((a, b) => b.score - a.score);
+        }
+
+        function renderBadges(badges, isMobile = false) {
+            if (!isMobile) {
+                return badges
+                    .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
+                    .join('');
+            }
+
+            // Mobile: show max 2 badges + overflow indicator
+            const maxBadges = 3;
+            if (badges.length <= maxBadges) {
+                return badges
+                    .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
+                    .join('');
+            }
+
+            const shown = badges.slice(0, maxBadges)
+                .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
+                .join('');
+            const overflow = `<div class="badge-overflow">+${badges.length - maxBadges}</div>`;
+            return shown + overflow;
         }
 
         function renderLeaderboard(teams) {
@@ -303,39 +493,83 @@
                 return;
             }
 
-            teams.forEach((team, index) => {
-                const rank = index + 1;
-                const item = document.createElement('div');
-                item.className = 'leaderboard-item';
+            const isMobile = window.innerWidth < 768;
 
-                // Generate rank with medal emoji
-                let rankDisplay = rank.toString();
-                if (rank === 1) rankDisplay = '🥇';
-                else if (rank === 2) rankDisplay = '🥈';
-                else if (rank === 3) rankDisplay = '🥉';
+            // Render podium for top 3
+            const podiumHTML = '<div class="podium-section" id="podium"></div>';
+            leaderboard.innerHTML = podiumHTML;
+            const podium = document.getElementById('podium');
 
-                // Generate badges
-                const badgesHTML = team.badges
-                    .map(badge => `<span class="badge" data-tooltip="${badge.tooltip}">${badge.symbol}</span>`)
-                    .join('');
-
-                item.innerHTML = `
-                    <div class="rank rank-${rank}">${rankDisplay}</div>
-                    <div class="team-info">
-                        <div class="team-name">${team.name}</div>
-                        <div class="badges">${badgesHTML}</div>
-                    </div>
-                    <div class="score">
-                        ${team.score.toLocaleString()}
-                        <span class="score-label">points</span>
-                    </div>
-                `;
-
-                leaderboard.appendChild(item);
+            // Create pedestals for top 3 (in order: 2nd, 1st, 3rd for visual balance)
+            const topThree = teams.slice(0, 3);
+            const pedestalOrder = [1, 0, 2]; // 2nd place, 1st place, 3rd place
+            
+            pedestalOrder.forEach(idx => {
+                if (topThree[idx]) {
+                    const team = topThree[idx];
+                    const rank = idx + 1;
+                    
+                    const badgesHTML = renderBadges(team.badges, isMobile);
+                    
+                    let rankEmoji = '';
+                    if (rank === 1) rankEmoji = '🥇';
+                    else if (rank === 2) rankEmoji = '🥈';
+                    else if (rank === 3) rankEmoji = '🥉';
+                    
+                    const pedestal = document.createElement('div');
+                    pedestal.className = `pedestal rank-${rank}`;
+                    pedestal.innerHTML = `
+                        <div class="pedestal-info">
+                            <div class="pedestal-rank">${rankEmoji}</div>
+                            <div class="pedestal-name">${team.name}</div>
+                            <div class="pedestal-badges">${badgesHTML}</div>
+                            <div class="pedestal-score">${team.score.toLocaleString()}</div>
+                        </div>
+                        <div class="pedestal-base">#${rank}</div>
+                    `;
+                    podium.appendChild(pedestal);
+                }
             });
+
+            // Render list for remaining teams
+            if (teams.length > 3) {
+                const listContainer = document.createElement('div');
+                listContainer.style.borderRadius = '0 0 15px 15px';
+                
+                teams.slice(3).forEach((team, index) => {
+                    const rank = index + 4;
+                    const item = document.createElement('div');
+                    item.className = 'leaderboard-item';
+
+                    const badgesHTML = renderBadges(team.badges, isMobile);
+
+                    item.innerHTML = `
+                        <div class="rank">#${rank}</div>
+                        <div class="team-info">
+                            <div class="team-name">${team.name}</div>
+                            <div class="badges">${badgesHTML}</div>
+                        </div>
+                        <div class="score">
+                            ${team.score.toLocaleString()}
+                            <span class="score-label">WET</span>
+                        </div>
+                    `;
+
+                    listContainer.appendChild(item);
+                });
+
+                leaderboard.appendChild(listContainer);
+            }
         }
 
         function initLeaderboard() {
+            // Check if spreadsheet ID was provided
+            if (!GOOGLE_SHEET_URL) {
+                const leaderboard = document.getElementById('leaderboard');
+                leaderboard.innerHTML = `<div style="padding: 40px; text-align: center; color: #999;">No spreadsheet provided. Add ?spreadsheet=SHEET_ID to the URL.</div>`;
+                return;
+            }
+
             // Fetch CSV from Google Sheet
             fetch(GOOGLE_SHEET_URL)
                 .then(response => response.text())
