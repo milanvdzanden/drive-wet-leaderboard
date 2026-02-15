@@ -204,7 +204,7 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            border-radius: 50%;
+            border-radius: 25%;
             background: rgba(100, 110, 130, 0.3);
             color: #e8eef5;
             font-size: 0.9em;
@@ -470,7 +470,7 @@
             }
 
             // Mobile: show max 2 badges + overflow indicator
-            const maxBadges = 3;
+            const maxBadges = 2;
             if (badges.length <= maxBadges) {
                 return badges
                     .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
