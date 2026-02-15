@@ -60,6 +60,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            min-width: 0;
         }
 
         .pedestal-info {
@@ -72,25 +73,34 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: flex-start;
             border: 1px solid rgba(180, 190, 220, 0.2);
+            overflow: visible;
+            min-width: 0;
         }
 
         .pedestal-rank {
             font-size: 3em;
-            margin: 10px 0;
+            margin: 0;
+            height: 0;
         }
 
         .pedestal-name {
-            font-size: 1.1em;
+            font-size: clamp(0.95em, 1.6vw, 1.1em);
             font-weight: 600;
             margin-bottom: 10px;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            white-space: normal;
+            line-height: 1.1;
+            hyphens: auto;
         }
 
         .pedestal-score {
             font-size: 1.8em;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: auto;
+            margin-bottom: 0;
         }
 
         .pedestal-base {
@@ -106,28 +116,30 @@
         .pedestal.rank-1 .pedestal-info {
             background: linear-gradient(135deg, rgba(200, 170, 80, 0.4) 0%, rgba(180, 150, 60, 0.3) 100%);
             order: -1;
-            height: 240px;
+            min-height: 240px;
             border: 1px solid rgba(220, 190, 100, 0.3);
         }
 
         .pedestal.rank-2 .pedestal-info {
             background: linear-gradient(135deg, rgba(180, 190, 210, 0.3) 0%, rgba(160, 170, 190, 0.2) 100%);
-            height: 180px;
+            min-height: 180px;
             border: 1px solid rgba(190, 200, 220, 0.2);
         }
 
         .pedestal.rank-3 .pedestal-info {
             background: linear-gradient(135deg, rgba(170, 140, 100, 0.3) 0%, rgba(150, 120, 80, 0.2) 100%);
-            height: 140px;
+            min-height: 140px;
             border: 1px solid rgba(190, 160, 120, 0.2);
         }
 
         .pedestal-badges {
-            display: flex;
-            gap: 5px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
             margin-top: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
+            margin-bottom: auto;
+            justify-items: center;
+            align-items: center;
         }
 
         .leaderboard {
@@ -202,8 +214,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
             border-radius: 25%;
             background: rgba(100, 110, 130, 0.3);
             color: #e8eef5;
@@ -281,6 +293,7 @@
             color: #8a95b8;
             display: inline;
             font-weight: normal;
+            margin-left: 8px;
         }
 
         .last-updated {
@@ -336,8 +349,8 @@
             }
 
             .badge {
-                width: 40px;
-                height: 40px;
+                width: 35px;
+                height: 35px;
                 font-size: 0.7em;
             }
 
@@ -348,8 +361,8 @@
             }
 
             .badge-overflow {
-                width: 40px;
-                height: 40px;
+                width: 35px;
+                height: 35px;
                 font-size: 0.7em;
             }
 
@@ -462,25 +475,22 @@
             return teams.sort((a, b) => b.score - a.score);
         }
 
-        function renderBadges(badges, isMobile = false) {
-            if (!isMobile) {
+        function renderBadges(badges, isMobile = false, maxBadges = null) {
+            let max = maxBadges;
+            if (max === null) {
+                max = isMobile ? 2 : badges.length;
+            }
+
+            if (badges.length <= max) {
                 return badges
                     .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
                     .join('');
             }
 
-            // Mobile: show max 2 badges + overflow indicator
-            const maxBadges = 2;
-            if (badges.length <= maxBadges) {
-                return badges
-                    .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
-                    .join('');
-            }
-
-            const shown = badges.slice(0, maxBadges)
+            const shown = badges.slice(0, max)
                 .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
                 .join('');
-            const overflow = `<div class="badge-overflow">+${badges.length - maxBadges}</div>`;
+            const overflow = `<div class="badge-overflow">+${badges.length - max}</div>`;
             return shown + overflow;
         }
 
@@ -509,12 +519,14 @@
                     const team = topThree[idx];
                     const rank = idx + 1;
                     
-                    const badgesHTML = renderBadges(team.badges, isMobile);
+                    let maxBadgesForRank = 3;
+                    if (rank === 1) maxBadgesForRank = 5;        // gold: max 5
+                    else if (rank === 2) maxBadgesForRank = 3;   // silver: max 3
+                    else if (rank === 3) maxBadgesForRank = 1;   // bronze: max 1
+                    
+                    const badgesHTML = renderBadges(team.badges, isMobile, maxBadgesForRank);
                     
                     let rankEmoji = '';
-                    if (rank === 1) rankEmoji = '🥇';
-                    else if (rank === 2) rankEmoji = '🥈';
-                    else if (rank === 3) rankEmoji = '🥉';
                     
                     const pedestal = document.createElement('div');
                     pedestal.className = `pedestal rank-${rank}`;
@@ -523,7 +535,7 @@
                             <div class="pedestal-rank">${rankEmoji}</div>
                             <div class="pedestal-name">${team.name}</div>
                             <div class="pedestal-badges">${badgesHTML}</div>
-                            <div class="pedestal-score">${team.score.toLocaleString()}</div>
+                            <div class="pedestal-score">${team.score.toLocaleString()}<span class="score-label">WET</span></div>
                         </div>
                         <div class="pedestal-base">#${rank}</div>
                     `;
@@ -541,7 +553,7 @@
                     const item = document.createElement('div');
                     item.className = 'leaderboard-item';
 
-                    const badgesHTML = renderBadges(team.badges, isMobile);
+                    const badgesHTML = renderBadges(team.badges, isMobile, null);
 
                     item.innerHTML = `
                         <div class="rank">#${rank}</div>
