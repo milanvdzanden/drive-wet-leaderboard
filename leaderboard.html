@@ -159,7 +159,7 @@
             background: rgba(30, 35, 50, 0.5);
             border-radius: 0 0 15px 15px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
+            overflow: visible;
             backdrop-filter: blur(10px);
         }
 
@@ -171,10 +171,7 @@
             transition: all 0.3s ease;
         }
 
-        .leaderboard-item:hover {
-            background-color: rgba(100, 110, 130, 0.15);
-            transform: translateX(5px);
-        }
+
 
         .leaderboard-item:last-child {
             border-bottom: none;
@@ -249,14 +246,24 @@
             width: 50px;
             height: 50px;
             border-radius: 25%;
-            cursor: help;
+            cursor: pointer;
             position: relative;
             border: 1px solid rgba(180, 190, 220, 0.2);
             object-fit: cover;
             flex-shrink: 0;
+            outline: none;
+            pointer-events: auto;
         }
 
-        .badge:hover::after {
+        .badge-wrapper {
+            position: relative;
+            display: inline-flex;
+            pointer-events: auto;
+            user-select: none;
+        }
+
+        .badge-wrapper:hover::after,
+        .badge-wrapper:focus-within::after {
             content: attr(data-tooltip);
             position: absolute;
             bottom: 100%;
@@ -269,8 +276,9 @@
             font-size: 0.9em;
             white-space: nowrap;
             margin-bottom: 8px;
-            z-index: 10;
+            z-index: 1000;
             border: 1px solid rgba(180, 190, 220, 0.2);
+            pointer-events: none;
         }
 
         .badge.gold {
@@ -311,6 +319,10 @@
             color: #8a95b8;
             display: inline;
             font-weight: normal;
+        }
+
+        .pedestal-info .score-label {
+            margin-left: 8px;
         }
 
         .last-updated {
@@ -504,12 +516,12 @@
 
             if (badges.length <= max) {
                 return badges
-                    .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
+                    .map(badge => `<span class="badge-wrapper" data-tooltip="${badge.tooltip}"><img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" tabindex="0" onerror="this.src='https://placehold.co/32x32'"></span>`)
                     .join('');
             }
 
             const shown = badges.slice(0, max)
-                .map(badge => `<img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" data-tooltip="${badge.tooltip}" onerror="this.src='https://placehold.co/32x32'">`)
+                .map(badge => `<span class="badge-wrapper" data-tooltip="${badge.tooltip}"><img class="badge ${badge.key}" src="${badge.imagePath}" alt="${badge.tooltip}" tabindex="0" onerror="this.src='https://placehold.co/32x32'"></span>`)
                 .join('');
             const overflow = `<div class="badge-overflow">+${badges.length - max}</div>`;
             return shown + overflow;
