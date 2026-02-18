@@ -386,30 +386,6 @@
             pointer-events: none;
         }
 
-        .badge.gold {
-            /* Gold badge */
-        }
-
-        .badge.silver {
-            /* Silver badge */
-        }
-
-        .badge.bronze {
-            /* Bronze badge */
-        }
-
-        .badge.star {
-            /* Star badge */
-        }
-
-        .badge.fire {
-            /* Fire badge */
-        }
-
-        .badge.trophy {
-            /* Trophy badge */
-        }
-
         .score {
             font-size: 1.8em;
             font-weight: bold;
@@ -559,29 +535,31 @@
 
         // Badge image mapping (from Google Sheet)
         const badgeImages = {
-            'top': 'Images/top.png',
-            'star': 'Images/star.png',
-            'fire': 'Images/fire.png',
-            'goal': 'Images/goal.png',
-            'rocket': 'Images/rocket.png',
-            'strong': 'Images/strong.png',
-            'growing': 'Images/growing.png',
-            'gold': 'Images/gold.png',
-            'silver': 'Images/silver.png',
-            'bronze': 'Images/bronze.png'
+            '100w': 'Images/100w.png',
+            '200w': 'Images/200w.png',
+            'accuracy': 'Images/accuracy.png',
+            'camera': 'Images/camera.png',
+            'ic': 'Images/ic.png',
+            'highestpower': 'Images/highestpower.png',
+            'moneybag': 'Images/moneybag.png',
+            'phoenix': 'Images/phoenix.png',
+            'recycle': 'Images/recycle.png',
+            'sustainable': 'Images/sustainable.png',
+            'generator': 'Images/generator.png'
         };
 
         const badgeTooltips = {
-            'top': 'Top Performer',
-            'star': '5-Day Streak',
-            'fire': 'Hot Streak',
-            'goal': 'Goal Achieved',
-            'rocket': 'Rising Star',
-            'strong': 'Strong Performer',
-            'growing': 'Growing',
-            'gold': 'Champion',
-            'silver': 'Runner-up',
-            'bronze': 'Third Place'
+            '100w': 'Reached 100W',
+            '200w': 'Reached 200W',
+            'accuracy': 'Perfect Accuracy',
+            'camera': 'Best Team Picture',
+            'ic': 'Microcontroller Wizards',
+            'highestpower': 'Highest Power Output',
+            'moneybag': 'Spent the most WET',
+            'phoenix': 'Bounced Back from Zero',
+            'recycle': 'Recycling Champion',
+            'sustainable': 'Best Sustainable Design',
+            'generator': 'Generator Experts'
         };
 
         function parseTeams(csvText) {
